@@ -1,0 +1,39 @@
+<div>
+  <label>Title</label>
+  <input type = "text" name = "title" value = "<%= post.title %>">
+</div>
+
+<div>
+  <label>User</label>
+  <select name = "user">
+  <% users.forEach(user => { %>
+    <% if(user.id === post.author) { %> 
+      <option selected label= "<%= user.name %>" value = "<%= user.id %>"></option>
+    <% } else { %> 
+      <option label= "<%=user.name%>" value = "<%= user.id %>"></option>
+    <% }%>
+  <% }) %> 
+  </select>
+</div>
+
+<div>
+  <label>Posted date</label>
+  <input type = "date" name = "postDate" 
+        value = "<%= post.postDate == null ? '' : post.postDate.toISOString().split('T')[0] %>">
+</div>
+
+<div>
+  <label>Word count</label>
+  <input type = "number" name = "wordCount" min = "1" value = "<%= post.wordCount %>">
+</div>
+
+<div>
+  <label>Cover</label>
+  <input type="file" name="cover">
+</div>
+
+
+<div>
+  <label>Content</label>
+  <textarea name = "content"><%= post.content %></textarea>
+</div>
