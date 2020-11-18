@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const path = require('path');
 
 const coverImageBasePath = 'uploads/postCovers'
 
@@ -15,10 +16,6 @@ const PostSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  wordCount:{
-    type: Number,
-    required: true
-  },
   createdAt:{
     type:Date,
     required:true,
@@ -32,6 +29,12 @@ const PostSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'User'
+  }
+});
+
+PostSchema.virtual('coverImagePath').get(function(){
+  if(this.coverImageName != null){
+    return path.join('/',coverImageBasePath,this.coverImageName);
   }
 });
 
