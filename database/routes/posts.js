@@ -1,19 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 const Post = require('../models/post');
 const User = require('../models/user');
 const { debug } = require('console');
-const uploadPath = path.join('public', Post.coverImageBasePath);
-const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif'];
-const upload = multer({
-  dest: uploadPath,
-  fileFilter: (req, file, callback) => {
-    callback(null, imageMimeTypes.includes(file.mimetype));
-  }
-});
+const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif' , 'image/jpg'];
 
 
 
@@ -50,15 +40,14 @@ router.get('/new',async(req,res) => {
 });
 
 //Create post route,
-router.post('/',upload.single('cover'), async (req,res) =>{
-  const fileName = req.file != null ? req.file.filename : null;
+router.post('/', async (req,res) =>{
   const post = new Post({
     title: req.body.title,
     user: req.body.user,
     postDate:new Date(req.body.postDate),
-    coverImageName: fileName,
     content:req.body.content
   });
+  saveCover(post, req.body.cover);
 
   try{
     const newPost = await post.save();
@@ -79,17 +68,19 @@ async function renderNewPage(res,post,hasError = false){
     if(hasError) params.errorMessage = 'Error creating post';
     res.render('posts/new',params);
   }catch{
-    if(post.coverImageName != null){
-      removePostCover(post.coverImageName);
-    }
     res.redirect('/posts');
   }
 }
 
-function removePostCover(filename){
-  fs.unlink(path.join(uploadPath,filename) , err => {
-    if(err) console.error(err);
-  });
+
+
+function saveCover(post,coverEncoded){
+  if(coverEncoded == null) return;
+  const cover = JSON.parse(coverEncoded);
+  if(cover != null && imageMimeTypes.includes(cover.type)){
+    post.coverImage = new Buffer.from(cover.data,'base64');
+    post.coverImageType = cover.type;
+  }
 }
 
 module.exports = router;
