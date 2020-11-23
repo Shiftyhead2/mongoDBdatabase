@@ -1,0 +1,9 @@
+<h2><%= user.name %></h2>
+<a href ="/users/<%= user.id  %>/edit">Edit</a>
+<%- include('../partials/deleteForm', {url : `/users/${user.id}`}) %>
+<% if(postsByUser.length > 0) {%>
+  <h2>Posts by user</h2>
+  <% postsByUser.forEach(post => {%>
+    <img height = "150" width = "100" src ="<%= post.coverImagePath %> ">
+  <% }) %>
+<% } %> 
