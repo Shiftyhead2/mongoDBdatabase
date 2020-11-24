@@ -3,6 +3,7 @@ const router = express.Router();
 const Post = require('../models/post');
 const User = require('../models/user');
 const { debug } = require('console');
+const { resolveAny } = require('dns');
 const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif' , 'image/jpg'];
 
 
@@ -51,22 +52,99 @@ router.post('/', async (req,res) =>{
 
   try{
     const newPost = await post.save();
-    //res.redirect(`${posts/newPost.id}`);
-    res.redirect('posts');
+    res.redirect(`/posts/${newPost.id}`);
   }catch{
     renderNewPage(res,post,true);
   }
 });
 
+//Show post route
+router.get('/:id',async (req,res) =>{
+  try{
+    const post = await Post.findById(req.params.id).populate('user').exec();
+    res.render('posts/show',{post:post});
+  }catch{
+    res.redirect('/');
+  }
+});
+
+//Edit post route
+router.get('/:id/edit',async(req,res) => {
+  try{
+    const post = await Post.findById(req.params.id);
+    renderEditPage(res,post);
+  }catch{
+    res.redirect('/');
+  }
+});
+
+//Update post route,
+router.put('/:id', async (req,res) =>{
+  let post
+  try{
+    post = await Post.findById(req.params.id);
+    post.title = req.body.title;
+    post.user = req.body.user;
+    post.postDate = new Date(req.body.postDate);
+    post.content = req.body.content;
+    if(req.body.cover != null && req.body.cover !== ''){
+      saveCover(post,req.body.cover);
+    }
+    await post.save();
+    res.redirect(`/posts/${post.id}`);
+  }catch{
+    if(post != null){
+      renderEditPage(res,post,true);
+    }else{
+      res.redirect('/');
+    }
+  }
+});
+
+//Delete post page
+router.delete('/:id',async(req,res) =>{
+  let post
+  try{
+    post = await Post.findById(req.params.id);
+    await post.remove();
+    res.redirect('/posts');
+  }catch{
+    if(post != null){
+      res.render('posts/show',{
+        post:post,
+        errorMessage:'Could not remove post'
+      });
+    }else{
+      res.redirect('/');
+    }
+  }
+});
+
+
+
 async function renderNewPage(res,post,hasError = false){
+  renderFormPage(res,post,'new',hasError);
+}
+
+async function renderEditPage(res,post,hasError = false){
+  renderFormPage(res,post,'edit',hasError);
+}
+
+async function renderFormPage(res,post,form,hasError = false){
   try{
     const users = await User.find({});
     const params = {
       users: users,
       post: post
     }
-    if(hasError) params.errorMessage = 'Error creating post';
-    res.render('posts/new',params);
+    if(hasError){
+      if(form === 'edit'){
+        params.errorMessage = 'Error updating post';
+      }else{
+        params.errorMessage = 'Error creating post';
+      }
+    }
+    res.render(`posts/${form}`,params);
   }catch{
     res.redirect('/posts');
   }

@@ -4,6 +4,8 @@
 <% if(postsByUser.length > 0) {%>
   <h2>Posts by user</h2>
   <% postsByUser.forEach(post => {%>
-    <img height = "150" width = "100" src ="<%= post.coverImagePath %> ">
+    <a href = "/posts/<%= post.id  %> ">
+      <img height = "150" width = "100" src ="<%= post.coverImagePath %> ">
+    </a>
   <% }) %>
 <% } %> 

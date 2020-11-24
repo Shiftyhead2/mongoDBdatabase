@@ -1,0 +1,15 @@
+<h2><%= post.title %> </h2>
+<img height = "150" width = "100" src="<%= post.coverImagePath  %> ">
+<div>
+  User:<%= post.user.name  %> 
+</div>
+<div>
+  Post date:<%= post.postDate.toDateString()  %> 
+</div>
+<div>
+  Description:<%= post.content  %> 
+</div>
+
+<a href = "/posts/<%= post.id  %>/edit">Edit</a>
+<%- include('../partials/deleteForm', {url: `/posts/${post.id}`}) %> 
+<a href = "/users/<%= post.user.id  %>">View user</a>

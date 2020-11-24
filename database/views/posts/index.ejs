@@ -20,6 +20,8 @@
 <br>
 <div>
   <% posts.forEach(post => {%>
-    <img height = "150" width = "100" src ="<%= post.coverImagePath %> ">
+    <a href ="posts/<%= post.id  %> ">
+      <img height = "150" width = "100" src ="<%= post.coverImagePath %> ">
+    </a>
   <% }) %>
 </div>
