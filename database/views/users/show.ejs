@@ -1,11 +1,9 @@
 <h2 class = "page-header"><%= user.name %></h2>
-<a href ="/users/<%= user.id  %>/edit">Edit</a>
-<%- include('../partials/deleteForm', {url : `/users/${user.id}`}) %>
+<div class = "btn-row">
+  <a class = "btn btn-primary" href ="/users/<%= user.id  %>/edit">Edit</a>
+  <%- include('../partials/deleteForm', {url : `/users/${user.id}`}) %>
+</div>
 <% if(postsByUser.length > 0) {%>
-  <h2>Posts by user</h2>
-  <% postsByUser.forEach(post => {%>
-    <a href = "/posts/<%= post.id  %> ">
-      <img height = "150" width = "100" src ="<%= post.coverImagePath %> ">
-    </a>
-  <% }) %>
+  <h2 class = "page-header">Posts by user</h2>
+  <%- include('../partials/bookGrid', {posts: postsByUser})  %> 
 <% } %> 

@@ -1,0 +1,10 @@
+<% postCoverClass = locals.large ? 'post-cover-large' : '' %> 
+<% postGridClass = locals.large ? 'post-grid-large' : '' %> 
+
+<div class = "post-grid <%= postGridClass  %> ">
+  <% posts.forEach(post => {%>
+    <a href = "/posts/<%= post.id  %> ">
+      <img class = "post-cover <%= postCoverClass  %> " src ="<%= post.coverImagePath %> ">
+   </a>
+  <% }) %>
+</div>

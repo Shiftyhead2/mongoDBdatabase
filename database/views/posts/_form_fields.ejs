@@ -1,34 +1,41 @@
-<div>
-  <label>Title</label>
-  <input type = "text" name = "title" value = "<%= post.title %>">
+<div class = "form-row">
+  <div class = "form-item">
+    <label>Title</label>
+    <input type = "text" name = "title" value = "<%= post.title %>">
+  </div>
+  <div class = "form-item">
+    <label>User</label>
+    <select name = "user">
+    <% users.forEach(user => { %>
+      <% if(user.id === post.author) { %> 
+        <option selected label= "<%= user.name %>" value = "<%= user.id %>"></option>
+      <% } else { %> 
+        <option label= "<%=user.name%>" value = "<%= user.id %>"></option>
+      <% }%>
+    <% }) %> 
+    </select>
+  </div>
 </div>
 
-<div>
-  <label>User</label>
-  <select name = "user">
-  <% users.forEach(user => { %>
-    <% if(user.id === post.author) { %> 
-      <option selected label= "<%= user.name %>" value = "<%= user.id %>"></option>
-    <% } else { %> 
-      <option label= "<%=user.name%>" value = "<%= user.id %>"></option>
-    <% }%>
-  <% }) %> 
-  </select>
-</div>
-
-<div>
-  <label>Posted date</label>
-  <input type = "date" name = "postDate" 
-        value = "<%= post.postDate == null ? '' : post.postDate.toISOString().split('T')[0] %>">
-</div>
-
-<div>
-  <label>Cover</label>
-  <input type="file" name="cover"  class = "filepond">
+<div class = "form-row">
+  <div class = "form-item">
+    <label>Posted date</label>
+    <input type = "date" name = "postDate" 
+         value = "<%= post.postDate == null ? '' : post.postDate.toISOString().split('T')[0] %>">
+  </div>
 </div>
 
 
-<div>
-  <label>Content</label>
-  <textarea name = "content"><%= post.content %></textarea>
+
+<div class = "form-row">
+  <div class = "form-item form-item-no-grow">
+    <label>Cover</label>
+    <input type="file" name="cover"  class = "post-cover filepond">
+  </div>
+  <div class = "form-item form-item-no-grow">
+    <label>Content</label>
+    <textarea name = "content"><%= post.content %></textarea>
+  </div>
 </div>
+
+

@@ -1,15 +1,21 @@
 <h2 class = "page-header"><%= post.title %> </h2>
-<img height = "150" width = "100" src="<%= post.coverImagePath  %> ">
-<div>
-  User:<%= post.user.name  %> 
-</div>
-<div>
-  Post date:<%= post.postDate.toDateString()  %> 
-</div>
-<div>
-  Description:<%= post.content  %> 
-</div>
 
-<a href = "/posts/<%= post.id  %>/edit">Edit</a>
-<%- include('../partials/deleteForm', {url: `/posts/${post.id}`}) %> 
-<a href = "/users/<%= post.user.id  %>">View user</a>
+<div class = "post-details">
+  <div>
+    <img class = "post-cover" src="<%= post.coverImagePath  %> ">
+    <div class = "post-details-btn-grid">
+      <a class = "btn btn-primary" href = "/posts/<%= post.id  %>/edit">Edit</a>
+      <%- include('../partials/deleteForm', {url: `/posts/${post.id}`}) %> 
+      <a class = "btn btn-primary post-details-user-btn" href = "/users/<%= post.user.id  %>">View user</a>
+    </div>
+  </div>
+
+  <div class = "post-details-grid">
+    <div class = "post-details-label">User:</div>
+    <div><%= post.user.name  %> </div>
+    <div class = "post-details-label">Post date:</div>
+    <div><%= post.postDate.toDateString()  %></div>
+    <div class = "post-details-label">Description:</div>
+    <div><%= post.content  %> </div>
+  </div>
+</div>
